@@ -97,11 +97,11 @@ export const ImportFromSheetsModal: React.FC<ImportFromSheetsModalProps> = ({ is
             let value = (row as any)[colIndex];
             
             if (field === 'full_name' && value) {
-              const parts = value.split(' ');
+              const parts = String(value).split(' ');
               leadPayload.first_name = parts[0];
               leadPayload.last_name = parts.slice(1).join(' ');
             } else if (field === 'estimated_value') {
-              leadPayload[field] = parseFloat(value) || 0;
+              leadPayload[field] = parseFloat(String(value)) || 0;
             } else {
               leadPayload[field] = value;
             }
