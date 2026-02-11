@@ -1,0 +1,7 @@
+{
+  "name": "Beyond Ads Agency CRM",
+  "description": "A comprehensive CRM for agencies with integrated Gemini AI intelligence and automated sales workflows.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
