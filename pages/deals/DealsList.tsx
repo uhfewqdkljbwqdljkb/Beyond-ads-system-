@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { 
@@ -34,9 +35,11 @@ const DealsList: React.FC = () => {
 
   if (isLoading) return <div className="h-full flex items-center justify-center"><Spinner size="lg" /></div>;
 
-  const totalValue = 2840000; // Mock derived from stages
-  const weightedValue = 1120000;
-  const wonThisMonth = 420000;
+  const totalValue = stages?.reduce((acc: number, stage: any) => 
+    acc + (stage.deals?.reduce((s: number, d: any) => s + (d.deal_value || 0), 0) || 0), 0) || 0;
+  
+  const weightedValue = stages?.reduce((acc: number, stage: any) => 
+    acc + (stage.deals?.reduce((s: number, d: any) => s + ((d.deal_value || 0) * (d.win_probability / 100)), 0) || 0), 0) || 0;
 
   return (
     <div className="space-y-6 h-full flex flex-col">
@@ -59,11 +62,6 @@ const DealsList: React.FC = () => {
               <span className="text-textMuted font-medium text-xs uppercase tracking-wider">Weighted</span>
               <span className="ml-2 font-bold text-textPrimary">${weightedValue.toLocaleString()}</span>
             </div>
-            <div className="w-px h-4 bg-border" />
-            <div>
-              <span className="text-textMuted font-medium text-xs uppercase tracking-wider">Won (Mo)</span>
-              <span className="ml-2 font-bold text-emerald-600">${wonThisMonth.toLocaleString()}</span>
-            </div>
           </div>
         </div>
         
@@ -82,19 +80,6 @@ const DealsList: React.FC = () => {
               placeholder="Search deals..."
               className="w-full pl-9 pr-4 py-1.5 text-sm bg-zinc-50 border-none rounded-md focus:bg-white focus:ring-1 focus:ring-primary placeholder:text-zinc-400"
             />
-          </div>
-          
-          <div className="flex items-center gap-1">
-            {['All Open', 'My Deals', 'Closing Soon'].map(f => (
-              <button
-                key={f}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors ${
-                  f === 'All Open' ? 'bg-primary-light text-primary' : 'text-textSecondary hover:text-textPrimary hover:bg-zinc-50'
-                }`}
-              >
-                {f}
-              </button>
-            ))}
           </div>
         </div>
         
@@ -124,7 +109,7 @@ const DealsList: React.FC = () => {
       <div className="flex-1 min-h-0">
         {view === 'board' ? (
           <DragDropContext onDragEnd={handleDragEnd}>
-            <div className="h-full flex gap-4 overflow-x-auto pb-4">
+            <div className="h-full flex gap-4 overflow-x-auto pb-4 no-scrollbar">
               {stages?.map((stage: any) => (
                 <div key={stage.id} className="flex-shrink-0 w-80 flex flex-col h-full bg-zinc-50/50 rounded-2xl border border-border/60">
                   {/* Column Header */}
@@ -140,12 +125,12 @@ const DealsList: React.FC = () => {
                       </div>
                     </div>
                     <p className="text-xs font-medium text-textSecondary pl-4">
-                      ${(stage.deals?.reduce((s:any, d:any) => s + d.deal_value, 0) || 0).toLocaleString()}
+                      ${(stage.deals?.reduce((s:any, d:any) => s + (d.deal_value || 0), 0) || 0).toLocaleString()}
                     </p>
                   </div>
                   
                   {/* Container */}
-                  <Droppable droppableId={stage.id}>
+                  <Droppable droppableId={String(stage.id)}>
                     {(provided, snapshot) => (
                       <div 
                         ref={provided.innerRef}
@@ -156,7 +141,7 @@ const DealsList: React.FC = () => {
                         `}
                       >
                         {stage.deals?.map((deal: any, index: number) => (
-                          <Draggable key={deal.id} draggableId={deal.id} index={index}>
+                          <Draggable key={deal.id} draggableId={String(deal.id)} index={index}>
                             {(provided, snapshot) => (
                               <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                 <DealCard deal={deal} isDragging={snapshot.isDragging} />

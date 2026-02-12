@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Sidebar } from './Sidebar';
-import { Header } from './Header';
-import { BottomNav } from '../mobile/BottomNav';
-import { useUIStore } from '../../store/uiStore';
-import { useIsMobile } from '../../hooks/useMediaQuery';
-import { BeyondAI } from '../ai/BeyondAI';
+import { Sidebar } from './Sidebar.tsx';
+import { Header } from './Header.tsx';
+import { BottomNav } from '../mobile/BottomNav.tsx';
+import { useUIStore } from '../../store/uiStore.ts';
+import { useIsMobile } from '../../hooks/useMediaQuery.ts';
+import { BeyondAI } from '../ai/BeyondAI.tsx';
 import { Sparkles } from 'lucide-react';
 
 export const AppLayout: React.FC = () => {

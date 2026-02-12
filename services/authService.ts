@@ -20,13 +20,16 @@ export const authService = {
         user: {
           id: 'u1',
           email: 'admin@nexusagency.com',
-          firstName: 'Admin',
-          lastName: 'User',
+          // Fix: firstName -> first_name to align with User interface
+          first_name: 'Admin',
+          // Fix: lastName -> last_name to align with User interface
+          last_name: 'User',
           role: 'admin',
-          avatar: 'https://picsum.photos/seed/admin/100/100',
-          teamLeadId: null,
-          commissionStructureId: 'cs-global-admin',
-        },
+          status: 'active',
+          avatar_url: 'https://picsum.photos/seed/admin/100/100',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        } as User,
         token: 'mock-jwt-token-admin',
       };
     }
@@ -36,13 +39,17 @@ export const authService = {
         user: {
           id: 'u2',
           email: 'rep@nexusagency.com',
-          firstName: 'Sarah',
-          lastName: 'Miller',
+          // Fix: firstName -> first_name to align with User interface
+          first_name: 'Sarah',
+          // Fix: lastName -> last_name to align with User interface
+          last_name: 'Miller',
+          // Fix: Type '"sales_rep"' is now valid as we updated UserRole in types.ts
           role: 'sales_rep',
-          avatar: 'https://picsum.photos/seed/sarah/100/100',
-          teamLeadId: 'u3',
-          commissionStructureId: 'cs-standard-rep',
-        },
+          status: 'active',
+          avatar_url: 'https://picsum.photos/seed/sarah/100/100',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        } as User,
         token: 'mock-jwt-token-rep',
       };
     }

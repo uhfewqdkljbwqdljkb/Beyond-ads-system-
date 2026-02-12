@@ -2,14 +2,20 @@
 import { supabase, handleError, paginate } from './api';
 
 export const taskService = {
-  async getTasks({ assignedTo, status, entityType, entityId, page = 1, limit = 20 } = {}) {
+  async getTasks({ assigned_to, status, related_to_type, related_to_id, overdue, page = 1, limit = 20 } = {}) {
     try {
       let query = supabase.from('tasks').select('*', { count: 'exact' });
-      if (assignedTo) query = query.eq('assigned_to', assignedTo);
-      if (status) query = query.eq('status', status);
-      if (entityType) query = query.eq('entity_type', entityType);
-      if (entityId) query = query.eq('entity_id', entityId);
       
+      if (assigned_to) query = query.eq('assigned_to', assigned_to);
+      if (status) query = query.eq('status', status);
+      if (related_to_type && related_to_id) {
+        query = query.eq('related_to_type', related_to_type).eq('related_to_id', related_to_id);
+      }
+      
+      if (overdue) {
+        query = query.lt('due_date', new Date().toISOString()).neq('status', 'completed');
+      }
+
       query = paginate(query, page, limit);
       query = query.order('due_date', { ascending: true });
       const { data, count, error } = await query;
@@ -20,21 +26,33 @@ export const taskService = {
     }
   },
 
-  async createTask(data) {
-    const { data: res, error } = await supabase.from('tasks').insert([data]).select();
+  async createTask(payload) {
+    const { data, error } = await supabase.from('tasks').insert([payload]).select().single();
     if (error) throw error;
-    return res[0];
+    return data;
   },
 
-  async updateTask(id, data) {
-    const { data: res, error } = await supabase.from('tasks').update(data).eq('id', id).select();
+  async completeTask(id) {
+    const { data, error } = await supabase
+      .from('tasks')
+      .update({ status: 'completed', completed_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
     if (error) throw error;
-    return res[0];
+    return data;
   },
 
-  async deleteTask(id) {
-    const { error } = await supabase.from('tasks').delete().eq('id', id);
-    if (error) throw error;
-    return true;
+  async getTasksDueToday(userId) {
+    const start = new Date(); start.setHours(0,0,0,0);
+    const end = new Date(); end.setHours(23,59,59,999);
+    const { data } = await supabase
+      .from('tasks')
+      .select('*')
+      .eq('assigned_to', userId)
+      .gte('due_date', start.toISOString())
+      .lte('due_date', end.toISOString())
+      .neq('status', 'completed');
+    return data || [];
   }
 };

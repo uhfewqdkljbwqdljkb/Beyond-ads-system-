@@ -47,27 +47,34 @@ export const useMoveDealToStage = () => {
   return useMutation({
     mutationFn: ({ dealId, stageId }) => dealService.moveDealToStage(dealId, stageId),
     onMutate: async ({ dealId, stageId }) => {
+      const queryKey = queryKeys.dealsByStage({});
       // Optimistic update
-      await queryClient.cancelQueries({ queryKey: ['deals', 'byStage'] });
-      const previousDeals = queryClient.getQueryData(['deals', 'byStage']);
+      await queryClient.cancelQueries({ queryKey });
+      const previousDeals = queryClient.getQueryData(queryKey);
       
-      // We assume byStage returns stages with a deals array
-      queryClient.setQueryData(['deals', 'byStage'], (old) => {
+      queryClient.setQueryData(queryKey, (old) => {
         if (!old) return old;
         return old.map(stage => {
           if (stage.id === stageId) {
-            // Find deal and add to this stage
             const movingDeal = previousDeals?.flatMap(s => s.deals).find(d => d.id === dealId);
-            if (movingDeal) return { ...stage, deals: [...stage.deals, { ...movingDeal, pipeline_stage_id: stageId }] };
+            if (movingDeal) {
+              return { 
+                ...stage, 
+                deals: [...(stage.deals || []), { ...movingDeal, pipeline_stage_id: stageId }] 
+              };
+            }
           }
-          return { ...stage, deals: stage.deals.filter(d => d.id !== dealId) };
+          return { 
+            ...stage, 
+            deals: (stage.deals || []).filter(d => d.id !== dealId) 
+          };
         });
       });
 
       return { previousDeals };
     },
     onError: (err, variables, context) => {
-      queryClient.setQueryData(['deals', 'byStage'], context.previousDeals);
+      queryClient.setQueryData(queryKeys.dealsByStage({}), context.previousDeals);
       toast.error('Failed to move deal');
     },
     onSettled: () => {

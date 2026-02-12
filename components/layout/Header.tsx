@@ -1,9 +1,9 @@
 import React from 'react';
 import { Search, Bell, Plus, Gift, Command } from 'lucide-react';
-import { useAuthStore } from '../../store/authStore';
-import { useUIStore } from '../../store/uiStore';
-import { useIsMobile } from '../../hooks/useMediaQuery';
-import { GlobalSearch } from '../search/GlobalSearch';
+import { useAuthStore } from '../../store/authStore.ts';
+import { useUIStore } from '../../store/uiStore.ts';
+import { useIsMobile } from '../../hooks/useMediaQuery.ts';
+import { GlobalSearch } from '../search/GlobalSearch.jsx';
 import { Menu } from 'lucide-react';
 
 export const Header: React.FC = () => {

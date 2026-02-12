@@ -2,14 +2,15 @@
 import { supabase, handleError } from './api';
 
 export const activityService = {
-  async getActivities(entityType, entity_id) {
+  async getActivitiesByEntity(entityType, entityId, { limit = 50, offset = 0 } = {}) {
     try {
       const { data, error } = await supabase
         .from('activities')
         .select('*, users(first_name, last_name, avatar_url)')
-        .eq('entity_type', entityType)
-        .eq('entity_id', entity_id)
-        .order('created_at', { ascending: false });
+        .eq('related_to_type', entityType)
+        .eq('related_to_id', entityId)
+        .order('created_at', { ascending: false })
+        .range(offset, offset + limit - 1);
       
       if (error) throw error;
       return data;
@@ -18,23 +19,24 @@ export const activityService = {
     }
   },
 
-  async createActivity(activityData) {
+  async createActivity(payload) {
     try {
-      const { data, error } = await supabase.from('activities').insert([activityData]).select();
+      const { data, error } = await supabase.from('activities').insert([payload]).select().single();
       if (error) throw error;
-      return data[0];
+      return data;
     } catch (error) {
       handleError(error);
     }
   },
 
-  async logNote(entityType, entity_id, content, createdBy) {
+  async createSystemActivity(entityType, entityId, type, subject, metadata = {}) {
     return this.createActivity({
-      entity_type: entityType,
-      entity_id,
-      activity_type: 'note',
-      content,
-      created_by: createdBy
+      related_to_type: entityType,
+      related_to_id: entityId,
+      type,
+      subject,
+      metadata,
+      is_system_generated: true
     });
   }
 };

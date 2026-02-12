@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   User, 
@@ -43,13 +44,15 @@ const ProfileSettings: React.FC = () => {
       {/* Profile Header */}
       <div className="flex flex-col md:flex-row items-center gap-6 pb-8 border-b border-border">
         <div className="relative group">
-          <Avatar name={`${user?.firstName} ${user?.lastName}`} size="xl" src={user?.avatar || ''} className="ring-4 ring-primary-light" />
+          {/* Fix: firstName/lastName -> first_name/last_name and avatar -> avatar_url to match User type */}
+          <Avatar name={`${user?.first_name} ${user?.last_name}`} size="xl" src={user?.avatar_url || ''} className="ring-4 ring-primary-light" />
           <button className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full shadow-lg border-2 border-white hover:bg-primary-hover transition-colors">
             <Camera size={16} />
           </button>
         </div>
         <div className="text-center md:text-left">
-          <h2 className="text-2xl font-black text-textPrimary tracking-tight">{user?.firstName} {user?.lastName}</h2>
+          {/* Fix: firstName/lastName -> first_name/last_name to match User type */}
+          <h2 className="text-2xl font-black text-textPrimary tracking-tight">{user?.first_name} {user?.last_name}</h2>
           <p className="text-textSecondary font-medium">{user?.email}</p>
           <div className="flex gap-2 mt-3 justify-center md:justify-start">
             <Badge variant="primary" className="uppercase tracking-widest text-[10px] font-black">{user?.role?.replace('_', ' ')}</Badge>
@@ -67,8 +70,9 @@ const ProfileSettings: React.FC = () => {
           </div>
           <form onSubmit={handleSaveProfile} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <Input label="First Name" defaultValue={user?.firstName} required />
-              <Input label="Last Name" defaultValue={user?.lastName} required />
+              {/* Fix: firstName/lastName -> first_name/last_name to match User type */}
+              <Input label="First Name" defaultValue={user?.first_name} required />
+              <Input label="Last Name" defaultValue={user?.last_name} required />
             </div>
             <Input label="Email Address" defaultValue={user?.email} readOnly disabled helperText="Email cannot be changed. Contact support to update login identity." />
             <Input label="Phone Number" placeholder="+1 (555) 000-0000" leftIcon={<Smartphone size={16} />} />

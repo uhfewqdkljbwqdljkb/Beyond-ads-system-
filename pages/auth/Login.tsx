@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { Button, Input, Checkbox, Card } from '../../components/ui';
+import { useAuth } from '../../hooks/useAuth.ts';
+import { Button, Input, Checkbox, Card } from '../../components/ui/index.ts';
 import { Eye, EyeOff, AlertCircle, ShieldCheck } from 'lucide-react';
-import { useToast } from '../../components/ui/Toast';
+import { useToast } from '../../components/ui/Toast.tsx';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();

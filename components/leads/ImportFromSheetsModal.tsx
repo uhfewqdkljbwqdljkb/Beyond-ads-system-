@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Modal, Button, Input, Select, Checkbox, Spinner } from '../ui';
 import { usePreviewSheet, useSaveSheetConnection } from '../../hooks/useGoogleSheets';
@@ -91,10 +90,12 @@ export const ImportFromSheetsModal: React.FC<ImportFromSheetsModalProps> = ({ is
         let isValid = false;
 
         // Map fields
-        Object.entries(columnMapping).forEach(([header, field]) => {
-          const colIndex = sheetData.headers.indexOf(header);
+        Object.entries(columnMapping).forEach(([header, val]) => {
+          const field = val as string;
+          const colIndex = (sheetData.headers as any[]).indexOf(header);
           if (colIndex > -1) {
-            let value = (row as any)[colIndex];
+            const rowData = row as any;
+            let value = rowData[colIndex];
             
             if (field === 'full_name' && value) {
               const parts = String(value).split(' ');

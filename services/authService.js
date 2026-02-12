@@ -1,5 +1,5 @@
 
-import { supabase, handleError } from './api';
+import { supabase, handleError } from './api.js';
 
 /**
  * Authentication Service

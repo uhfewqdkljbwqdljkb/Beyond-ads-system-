@@ -1,3 +1,4 @@
+
 import { supabase, handleError, paginate } from './api';
 
 export const dealService = {
@@ -96,11 +97,17 @@ export const dealService = {
 
   async getDealsByStage() {
     try {
-      const { data: stages } = await supabase.from('pipeline_stages').select('*').order('stage_order');
-      const { data: deals } = await supabase
+      const { data: stagesData, error: stagesError } = await supabase.from('pipeline_stages').select('*').order('stage_order');
+      if (stagesError) throw stagesError;
+      
+      const { data: dealsData, error: dealsError } = await supabase
         .from('deals')
         .select('*, clients(company_name), users(first_name, last_name)')
         .eq('status', 'open');
+      if (dealsError) throw dealsError;
+      
+      const stages = stagesData || [];
+      const deals = dealsData || [];
       
       return stages.map(stage => ({
         ...stage,
@@ -108,6 +115,7 @@ export const dealService = {
       }));
     } catch (error) {
       handleError(error);
+      return [];
     }
   }
 };
