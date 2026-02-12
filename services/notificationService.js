@@ -1,4 +1,4 @@
-import { supabase, handleError } from './api';
+import { supabase, handleError } from './api.js';
 
 export const notificationService = {
   async getNotifications(userId) {

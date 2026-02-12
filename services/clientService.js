@@ -1,5 +1,4 @@
-
-import { supabase, handleError, paginate } from './api';
+import { supabase, handleError, paginate } from './api.js';
 
 export const clientService = {
   async getClients({ page = 1, limit = 20, search } = {}) {

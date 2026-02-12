@@ -1,4 +1,4 @@
-import { supabase, handleError, paginate } from './api';
+import { supabase, handleError, paginate } from './api.js';
 
 export const invoiceService = {
   async getInvoices({ status, clientId, deal_id, page = 1, limit = 20 } = {}) {

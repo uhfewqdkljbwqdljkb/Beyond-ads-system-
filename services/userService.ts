@@ -1,6 +1,5 @@
-
-import { supabase, handleError } from './api';
-import type { User, UpdateUserPayload, UserRole, UserStatus } from '../types';
+import { supabase, handleError } from './api.js';
+import type { User, UpdateUserPayload, UserRole, UserStatus } from '../types.ts';
 
 export const userService = {
   async getUsers(filters?: { role?: UserRole; status?: UserStatus; team_id?: string; search?: string }) {

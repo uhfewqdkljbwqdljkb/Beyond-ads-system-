@@ -1,5 +1,4 @@
-
-import { supabase, handleError, paginate } from './api';
+import { supabase, handleError, paginate } from './api.js';
 
 export const taskService = {
   async getTasks({ assigned_to, status, related_to_type, related_to_id, overdue, page = 1, limit = 20 } = {}) {

@@ -1,5 +1,4 @@
-
-import { supabase, handleError, paginate } from './api';
+import { supabase, handleError, paginate } from './api.js';
 
 /**
  * Service for managing users and sales team hierarchies
@@ -93,5 +92,16 @@ export const userService = {
     } catch (error) {
       handleError(error);
     }
+  },
+  
+  async getCurrentUser() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('Not authenticated');
+    return this.getUserById(user.id);
+  },
+
+  async updateLastLogin(userId) {
+    const { error } = await supabase.rpc('update_last_login', { p_user_id: userId });
+    if (error) throw error;
   }
 };

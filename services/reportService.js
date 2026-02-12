@@ -1,5 +1,4 @@
-
-import { supabase, handleError } from './api';
+import { supabase, handleError } from './api.js';
 
 export const reportService = {
   async getDashboardStats() {

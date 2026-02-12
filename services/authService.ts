@@ -1,5 +1,4 @@
-
-import { User } from '../types';
+import { User } from '../types.ts';
 
 interface LoginResponse {
   user: User;

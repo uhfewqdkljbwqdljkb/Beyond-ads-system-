@@ -1,5 +1,4 @@
-
-import { supabase, handleError, paginate } from './api';
+import { supabase, handleError, paginate } from './api.js';
 
 export const dealService = {
   async getDeals({ stageId, status, assignedTo, page = 1, limit = 50 } = {}) {

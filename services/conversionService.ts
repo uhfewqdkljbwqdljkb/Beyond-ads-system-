@@ -1,7 +1,6 @@
-
-import { supabase, handleError } from './api';
-import { activityService } from './activityService';
-import { automationService } from './automationService';
+import { supabase, handleError } from './api.js';
+import { activityService } from './activityService.js';
+import { automationService } from './automationService.ts';
 
 export const conversionService = {
   /**

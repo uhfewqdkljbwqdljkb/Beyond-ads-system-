@@ -1,6 +1,5 @@
-
-import { supabase, handleError } from './api';
-import { Contact } from '../types';
+import { supabase, handleError } from './api.js';
+import { Contact } from '../types.ts';
 
 export const contactService = {
   async getContactsByClientId(clientId: string): Promise<Contact[]> {

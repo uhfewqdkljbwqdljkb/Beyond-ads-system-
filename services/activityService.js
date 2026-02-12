@@ -1,5 +1,4 @@
-
-import { supabase, handleError } from './api';
+import { supabase, handleError } from './api.js';
 
 export const activityService = {
   async getActivitiesByEntity(entityType, entityId, { limit = 50, offset = 0 } = {}) {

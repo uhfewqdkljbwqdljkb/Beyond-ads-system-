@@ -1,8 +1,7 @@
-
-import { supabase } from './api';
-import { activityService } from './activityService';
-import { notificationService } from './notificationService';
-import { taskService } from './taskService';
+import { supabase } from './api.js';
+import { activityService } from './activityService.js';
+import { notificationService } from './notificationService.js';
+import { taskService } from './taskService.js';
 
 export const automationService = {
   async handleStageChange(dealId: string, oldStageId: string, newStageId: string, userId: string) {

@@ -1,4 +1,3 @@
-
 import { supabase, handleError } from './api.js';
 
 /**

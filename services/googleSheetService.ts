@@ -1,5 +1,4 @@
-
-import { supabase, handleError } from './api';
+import { supabase, handleError } from './api.js';
 
 const API_KEY = (import.meta as any).env?.VITE_GOOGLE_SHEETS_API_KEY || '';
 
